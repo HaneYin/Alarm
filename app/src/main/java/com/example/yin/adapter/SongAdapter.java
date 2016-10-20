@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.yin.alarm.R;
+import com.example.yin.constant.MyConstant;
 import com.example.yin.entity.Music;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class SongAdapter extends BaseAdapter {
     private List<Music> music;
     private Context context;
+    private TextView tv;
 
     public SongAdapter(List<Music> music, Context context){
         this.music=music;
@@ -42,20 +44,12 @@ public class SongAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if(convertView==null){
-            holder=new ViewHolder();
-            convertView= LayoutInflater.from(context).inflate(R.layout.songitem,null);
-            holder.tv= (TextView) convertView.findViewById(R.id.songitem);
-            convertView.setTag(holder);
-        }else{
-            holder= (ViewHolder) convertView.getTag();
+        convertView= LayoutInflater.from(context).inflate(R.layout.songitem,null);
+        tv= (TextView) convertView.findViewById(R.id.songitem);
+        tv.setText(music.get(position).getSong_title());
+        if(position== MyConstant.listPosition){
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.item));
         }
-        holder.tv.setText(music.get(position).getSong_title());
         return convertView;
-    }
-    //持有者优化
-    class ViewHolder{
-        public TextView tv;
     }
 }
