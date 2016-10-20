@@ -135,9 +135,15 @@ public class AddAlarm extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.chooseSong://点我
+                    MyConstant.listPosition=-1;
                     view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.choose_song_dialog,null);
                     songList= (ListView) view.findViewById(R.id.showSongList);
                     noSong= (TextView) view.findViewById(R.id.no_song);
+                    builder=new AlertDialog.Builder(AddAlarm.this);
+                    builder.setTitle(MyConstant.chooseSong);
+                    builder.setView(view);
+                    builder.setNegativeButton(MyConstant.cancel,null);
+                    final AlertDialog dialog = builder.show();
                     if(MyConstant.localMusic==null || MyConstant.localMusic.size()==0){
                         songList.setVisibility(View.GONE);
                     }else{
@@ -147,14 +153,13 @@ public class AddAlarm extends AppCompatActivity {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 pos=position;
                                 showName.setText(MyConstant.localMusic.get(position).getSong_title());
+                                MyConstant.listPosition=position;
+                                songAdapter.notifyDataSetChanged();
+                                dialog.dismiss();
                             }
                         });
                     }
-                    builder=new AlertDialog.Builder(AddAlarm.this);
-                    builder.setTitle(MyConstant.chooseSong);
-                    builder.setView(view);
-                    builder.setNegativeButton(MyConstant.cancel,null);
-                    builder.show();
+
                     break;
                 case R.id.saveSetting://确定
                     tpCurHour=tp.getCurrentHour().toString();

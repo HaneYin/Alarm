@@ -23,5 +23,6 @@ public class MyConstant {
     public static List<Music> localMusic = null;
     public static boolean isReadyToRecord=false;
     public static List<Alarm> localAlarm = null;
+    public static int listPosition=-1;
 
 }
