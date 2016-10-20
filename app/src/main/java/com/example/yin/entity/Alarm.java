@@ -8,11 +8,12 @@ import java.util.Date;
 
 public class Alarm {
     private int id;
-    private String date;
-    private String remark;
+    private String date;//响铃时间
+    private String remark;//备注
     private String songPath;
     private int isDeleted;
-    private int state;
+    private int state;//状态开启
+    private String period;//周期
 
     public int getId() {
         return id;
@@ -60,5 +61,13 @@ public class Alarm {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
     }
 }

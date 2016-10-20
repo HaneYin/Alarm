@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        refresh();
         listener();
     }
 
@@ -132,8 +131,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        flag=true;
+        refresh();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        flag=false;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         flag=false;
     }
+
 }

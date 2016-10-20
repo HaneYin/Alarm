@@ -7,6 +7,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.yin.constant.MyConstant;
 import com.example.yin.entity.Music;
@@ -69,11 +70,27 @@ public class StartActivity extends AppCompatActivity {
                         null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
-                    String title = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-                    String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
                     long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+                    if(duration<6000){
+                        continue;
+                    }
+                    //歌曲名
+                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                    //歌手
+                    String singer = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                    //专辑
+                    String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                    //长度
+                    long size = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
+                    //时长
+                    int durations = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+                    //路径
                     String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    music = new Music(title, artist, duration, url);
+                    //显示的文件名
+                    String _display_name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
+                    //类型
+                    String mime_type = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE));
+                    music = new Music(title, singer, duration, url);
                     localMusic.add(music);
                     c+=100/cursor.getCount();
                     c=((i==cursor.getCount()-1)&&(c<100) ? 100 : c);
