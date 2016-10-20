@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
  * 闹钟设置界面
  */
 public class AddAlarm extends AppCompatActivity {
+    private static final String LOG_TAG = "AddAlarm";
     private TimePicker tp;
     private TextView showName,noSong;
     private EditText etRemark;
@@ -45,6 +47,8 @@ public class AddAlarm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_alarm);
+        //保持屏幕唤醒，否则在录音过程当中锁屏容易被回收
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         init();
         startListener();
     }
@@ -92,6 +96,8 @@ public class AddAlarm extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 myRecord.startVoice();
+                pos=-1;
+                Toast.makeText(AddAlarm.this,MyConstant.startRecord,Toast.LENGTH_LONG).show();
                 return false;
             }
         });
@@ -105,10 +111,10 @@ public class AddAlarm extends AppCompatActivity {
                             String ringPath= myRecord.stopVoice();
                             showName.setText(ringPath);
                             Toast.makeText(AddAlarm.this,MyConstant.endRecord,Toast.LENGTH_SHORT).show();
-                            Log.i("mylog", "录音结束");
+                            Log.i(LOG_TAG, "录音结束");
                         }else{
                             Toast.makeText(AddAlarm.this,MyConstant.tooShort,Toast.LENGTH_SHORT).show();
-                            Log.i("mylog", "时间太短了");
+                            Log.i(LOG_TAG, "时间太短了");
                         }
                         break;
                     default:
@@ -158,7 +164,7 @@ public class AddAlarm extends AppCompatActivity {
                     date=(curHour+":"+curMin);
                     remark=(etRemark.getText().toString()==null || etRemark.getText().toString().trim().equals("") ? null : etRemark.getText().toString());
 //                    ringPath=(showName.getText().toString().equals(MyConstant.defaultRing) ? null : showName.getText().toString());
-                    ringPath=(pos==-1 ? null : MyConstant.localMusic.get(pos).getSong_url());
+                    ringPath=(pos==-1 ? (!showName.getText().toString().equals(MyConstant.defaultRing) ? showName.getText().toString() : null) : MyConstant.localMusic.get(pos).getSong_url());
                     mySqlite.addAlarm(date,remark,ringPath);
                     Toast.makeText(AddAlarm.this,MyConstant.addAlarmOK,Toast.LENGTH_SHORT).show();
                     finish();

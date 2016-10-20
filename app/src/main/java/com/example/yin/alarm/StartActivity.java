@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StartActivity extends AppCompatActivity {
-    private static final String TAG = "StartActivity";
+    private static final String LOG_TAG = "StartActivity";
     private CircleProgressView myProgress;
     private Intent intent;
     private List<Music> localMusic;
@@ -69,32 +69,34 @@ public class StartActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                String title,singer,album,url,_display_name,mime_type;
+                int durations;long duration,size;
                 // 得到所有Music对象
                 Cursor cursor = getApplication().getContentResolver().query(
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null,
                         null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
-                    long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                    if(duration<6000){
+                    duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+                    if(duration<10000){
                         continue;
                     }
                     //歌曲名
-                    String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                    title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
                     //歌手
-                    String singer = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                    singer = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
                     //专辑
-                    String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                    album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                     //长度
-                    long size = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
+                    size = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
                     //时长
-                    int durations = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+                    durations = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
                     //路径
-                    String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                    url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
                     //显示的文件名
-                    String _display_name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
+                    _display_name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
                     //类型
-                    String mime_type = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE));
+                    mime_type = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE));
                     music = new Music(title, singer, duration, url);
                     localMusic.add(music);
                     c+=100/cursor.getCount();
@@ -108,20 +110,9 @@ public class StartActivity extends AppCompatActivity {
                     }
                 }
                 cursor.close();
-//                if(localMusic!=null){
-//                    mySqlite.manageMusic(localMusic);
-//                }
-//                MyConstant.localMusic=mySqlite.getAllMusic();
                 MyConstant.localMusic=localMusic;
-
                 //得到闹钟
                 MyConstant.localAlarm = mySqlite.getAllAlarm();
-                if(MyConstant.localAlarm!=null && MyConstant.localAlarm.size()>0){
-                    for(Alarm a : MyConstant.localAlarm){
-                        Log.i(TAG,a.toString());
-                    }
-                }
-
                 startActivity(intent);
                 finish();
             }

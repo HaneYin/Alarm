@@ -17,9 +17,11 @@ public class MyConstant {
     public static String ok="确定";
     public static String cancel="取消";
     public static String twice="再按一次退出";
+    public static String startRecord="开始录音...";
     public static String endRecord="录音结束";
     public static String tooShort="按住别松手";
-    public static List<Music> localMusic;
+    public static List<Music> localMusic = null;
     public static boolean isReadyToRecord=false;
-    public static List<Alarm> localAlarm;
+    public static List<Alarm> localAlarm = null;
+
 }

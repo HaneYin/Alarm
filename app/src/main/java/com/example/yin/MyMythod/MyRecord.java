@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 
 public class MyRecord {
-    private static final String TAG = "MyRecord";
+    private static final String LOG_TAG = "MyRecord";
     /** sdCard状态 */
     private String state = null;
     /** 语音文件保存路径 */
@@ -36,11 +36,11 @@ public class MyRecord {
     public void startVoice() {
         mFileName= PATH + UUID.randomUUID().toString() + ".amr";
         if (!state.equals(android.os.Environment.MEDIA_MOUNTED)) {
-            Log.i(TAG, "SD Card is not mounted,It is  " + state + ".");
+            Log.i(LOG_TAG, "SD Card is not mounted,It is  " + state + ".");
         }
         File directory = new File(mFileName).getParentFile();
         if (!directory.exists() && !directory.mkdirs()) {
-            Log.i(TAG, "Path to file could not be created");
+            Log.i(LOG_TAG, "Path to file could not be created");
         }
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -50,7 +50,7 @@ public class MyRecord {
         try {
             mRecorder.prepare();
         } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
+            Log.e(LOG_TAG, "prepare() failed");
         }
         mRecorder.start();
         MyConstant.isReadyToRecord=true;

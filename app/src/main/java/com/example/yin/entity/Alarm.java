@@ -94,6 +94,15 @@ public class Alarm {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        Alarm alarm = (Alarm) obj;
+        if(this.date.equals(alarm.getDate()) && this.period.equals(alarm.getPeriod())){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "Alarm{" +
                 "id=" + id +
