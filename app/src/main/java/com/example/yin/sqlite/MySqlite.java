@@ -85,16 +85,6 @@ public class MySqlite extends SQLiteOpenHelper {
         db.close();
         return alarms;
     }
-    /**
-     * 根据歌曲url删除
-     * @param song_url
-     */
-    public void deleteFromUrl(String song_url) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "update mymusic set song_isdeleted=1 where song_url=?";
-        db.execSQL(sql, new String[] { song_url});
-        db.close();
-    }
 
     /**
      * 查询表格是否存在
@@ -127,13 +117,5 @@ public class MySqlite extends SQLiteOpenHelper {
             db.close();
         }
         return false;
-    }
-    /**
-     * 从数据库删除Music
-     * @param music
-     */
-    public void deleteMusic(Music music) {
-        String url=music.getSong_url();
-        deleteFromUrl(url);
     }
 }

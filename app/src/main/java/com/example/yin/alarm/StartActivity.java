@@ -13,6 +13,7 @@ import com.example.yin.constant.MyConstant;
 import com.example.yin.entity.Alarm;
 import com.example.yin.entity.Music;
 import com.example.yin.myview.CircleProgressView;
+import com.example.yin.service.serviceImpl.AlarmServiceImpl;
 import com.example.yin.sqlite.MySqlite;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class StartActivity extends AppCompatActivity {
     private List<Music> localMusic;
     private Music music;
     private int c=0;
-    private MySqlite mySqlite;
+    private AlarmServiceImpl alarmService;
 
     private Handler handler = new Handler(){
         @Override
@@ -58,7 +59,7 @@ public class StartActivity extends AppCompatActivity {
         intent=new Intent(StartActivity.this,MainActivity.class);
         localMusic=new ArrayList<>();
         music=new Music();
-        mySqlite=new MySqlite(StartActivity.this);
+        alarmService=new AlarmServiceImpl(StartActivity.this);
     }
 
     /**
@@ -112,7 +113,7 @@ public class StartActivity extends AppCompatActivity {
                 cursor.close();
                 MyConstant.localMusic=localMusic;
                 //得到闹钟
-                MyConstant.localAlarm = mySqlite.getAllAlarm();
+                MyConstant.localAlarm = alarmService.getAll();
                 startActivity(intent);
                 finish();
             }

@@ -11,6 +11,7 @@ import java.util.List;
 
 public class MyConstant {
     public static String chooseSong="铃声选择";
+    public static String noSong="一首歌也没有...";
     public static String defaultRing="默认铃声";
     public static String discardSetting="要舍弃对该闹钟所做的更改吗？";
     public static String addAlarmOK="添加闹钟成功！";

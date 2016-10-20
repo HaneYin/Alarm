@@ -18,6 +18,12 @@ public class Alarm {
     public Alarm() {
     }
 
+    public Alarm(String date, String remark, String songPath) {
+        this.date = date;
+        this.remark = remark;
+        this.songPath = songPath;
+    }
+
     public Alarm(String date, String remark, String songPath, int isDeleted, int state, String period) {
         this.date = date;
         this.remark = remark;

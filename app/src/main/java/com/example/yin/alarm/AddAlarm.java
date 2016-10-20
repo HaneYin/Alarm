@@ -21,7 +21,9 @@ import android.widget.Toast;
 import com.example.yin.MyMythod.MyRecord;
 import com.example.yin.adapter.SongAdapter;
 import com.example.yin.constant.MyConstant;
+import com.example.yin.entity.Alarm;
 import com.example.yin.entity.Music;
+import com.example.yin.service.serviceImpl.AlarmServiceImpl;
 import com.example.yin.sqlite.MySqlite;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 public class AddAlarm extends AppCompatActivity {
     private static final String LOG_TAG = "AddAlarm";
     private TimePicker tp;
-    private TextView showName,noSong;
+    private TextView showName;
     private EditText etRemark;
     private Button choose,ok,longBtn;
     private View view;
@@ -42,7 +44,7 @@ public class AddAlarm extends AppCompatActivity {
     private MyRecord myRecord;
     private String tpCurHour,tpCurMin,curHour,curMin,date,remark,ringPath;
     private int pos;//记录点击本地音乐列表
-    private MySqlite mySqlite;
+    private AlarmServiceImpl alarmService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,7 @@ public class AddAlarm extends AppCompatActivity {
         tp.setCurrentHour(8);
         tp.setCurrentMinute(00);
         songAdapter=new SongAdapter((MyConstant.localMusic==null ? new ArrayList<Music>() : MyConstant.localMusic),AddAlarm.this);
-        mySqlite=new MySqlite(AddAlarm.this);
+        alarmService=new AlarmServiceImpl(AddAlarm.this);
     }
 
     private void startListener(){
@@ -138,15 +140,17 @@ public class AddAlarm extends AppCompatActivity {
                     MyConstant.listPosition=-1;
                     view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.choose_song_dialog,null);
                     songList= (ListView) view.findViewById(R.id.showSongList);
-                    noSong= (TextView) view.findViewById(R.id.no_song);
-                    builder=new AlertDialog.Builder(AddAlarm.this);
-                    builder.setTitle(MyConstant.chooseSong);
-                    builder.setView(view);
-                    builder.setNegativeButton(MyConstant.cancel,null);
-                    final AlertDialog dialog = builder.show();
                     if(MyConstant.localMusic==null || MyConstant.localMusic.size()==0){
-                        songList.setVisibility(View.GONE);
+                        builder=new AlertDialog.Builder(AddAlarm.this);
+                        builder.setMessage(MyConstant.noSong)
+                                .setPositiveButton(MyConstant.ok,null)
+                                .show();
                     }else{
+                        builder=new AlertDialog.Builder(AddAlarm.this);
+                        builder.setTitle(MyConstant.chooseSong);
+                        builder.setView(view);
+                        builder.setNegativeButton(MyConstant.cancel,null);
+                        final AlertDialog dialog = builder.show();
                         songList.setAdapter(songAdapter);
                         songList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
@@ -159,7 +163,6 @@ public class AddAlarm extends AppCompatActivity {
                             }
                         });
                     }
-
                     break;
                 case R.id.saveSetting://确定
                     tpCurHour=tp.getCurrentHour().toString();
@@ -168,9 +171,8 @@ public class AddAlarm extends AppCompatActivity {
                     curMin=(tpCurMin.length()==1 ? "0"+tpCurMin : tpCurMin);
                     date=(curHour+":"+curMin);
                     remark=(etRemark.getText().toString()==null || etRemark.getText().toString().trim().equals("") ? null : etRemark.getText().toString());
-//                    ringPath=(showName.getText().toString().equals(MyConstant.defaultRing) ? null : showName.getText().toString());
                     ringPath=(pos==-1 ? (!showName.getText().toString().equals(MyConstant.defaultRing) ? showName.getText().toString() : null) : MyConstant.localMusic.get(pos).getSong_url());
-                    mySqlite.addAlarm(date,remark,ringPath);
+                    alarmService.save(new Alarm(date,remark,ringPath));
                     Toast.makeText(AddAlarm.this,MyConstant.addAlarmOK,Toast.LENGTH_SHORT).show();
                     finish();
                     break;
