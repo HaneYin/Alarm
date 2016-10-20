@@ -1,5 +1,6 @@
 package com.example.yin.constant;
 
+import com.example.yin.entity.Alarm;
 import com.example.yin.entity.Music;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public class MyConstant {
     public static String tooShort="按住别松手";
     public static List<Music> localMusic;
     public static boolean isReadyToRecord=false;
+    public static List<Alarm> localAlarm;
 }

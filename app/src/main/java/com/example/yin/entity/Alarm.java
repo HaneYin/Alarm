@@ -15,6 +15,28 @@ public class Alarm {
     private int state;//状态开启
     private String period;//周期
 
+    public Alarm() {
+    }
+
+    public Alarm(String date, String remark, String songPath, int isDeleted, int state, String period) {
+        this.date = date;
+        this.remark = remark;
+        this.songPath = songPath;
+        this.isDeleted = isDeleted;
+        this.state = state;
+        this.period = period;
+    }
+
+    public Alarm(int id, String date, String remark, String songPath, int isDeleted, int state, String period) {
+        this.id = id;
+        this.date = date;
+        this.remark = remark;
+        this.songPath = songPath;
+        this.isDeleted = isDeleted;
+        this.state = state;
+        this.period = period;
+    }
+
     public int getId() {
         return id;
     }
@@ -69,5 +91,18 @@ public class Alarm {
 
     public void setPeriod(String period) {
         this.period = period;
+    }
+
+    @Override
+    public String toString() {
+        return "Alarm{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", remark='" + remark + '\'' +
+                ", songPath='" + songPath + '\'' +
+                ", isDeleted=" + isDeleted +
+                ", state=" + state +
+                ", period='" + period + '\'' +
+                '}';
     }
 }

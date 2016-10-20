@@ -39,7 +39,7 @@ public class AddAlarm extends AppCompatActivity {
     private AlertDialog.Builder builder;
     private MyRecord myRecord;
     private String tpCurHour,tpCurMin,curHour,curMin,date,remark,ringPath;
-    private int pos;
+    private int pos;//记录点击本地音乐列表
     private MySqlite mySqlite;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,8 @@ public class AddAlarm extends AppCompatActivity {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
                         if(MyConstant.isReadyToRecord){
-                            myRecord.stopVoice();
+                            String ringPath= myRecord.stopVoice();
+                            showName.setText(ringPath);
                             Toast.makeText(AddAlarm.this,MyConstant.endRecord,Toast.LENGTH_SHORT).show();
                             Log.i("mylog", "录音结束");
                         }else{

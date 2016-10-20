@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.yin.entity.Alarm;
 import com.example.yin.entity.Music;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 
 public class MySqlite extends SQLiteOpenHelper {
+    private static final String TAG = "MySqlite";
     public MySqlite(Context context) {
         super(context, "alarm.db", null, 1);
     }
@@ -34,6 +36,7 @@ public class MySqlite extends SQLiteOpenHelper {
             String sql ="create table alarm (id integer primary key autoincrement,date varchar not null,remark varchar,songPath varchar null,isDeleted integer default '0',state integer default '0',period varchar default '1,2,3,4,5,6,7')";
             db.execSQL(sql);
         }
+        Log.i(TAG,"sqlite start");
     }
 
     @Override
@@ -61,7 +64,33 @@ public class MySqlite extends SQLiteOpenHelper {
             db.execSQL(sql,new Object[]{date,path});
             db.close();
         }
-        Log.i("mylog","save ok! sql:"+sql);
+        Log.i(TAG,"add ok");
+    }
+
+    public List<Alarm> getAllAlarm(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "select * from alarm where isDeleted=0";
+        Cursor cursor = db.rawQuery(sql, null);
+        if(!cursor.moveToNext()){
+            return null;
+        }
+        List<Alarm> alarms=new ArrayList<>();
+        int id,isDeleted,state;
+        String date,remark,songPath,period;
+        while(cursor.moveToNext()){
+            id=cursor.getInt(cursor.getColumnIndex("id"));
+            isDeleted=cursor.getInt(cursor.getColumnIndex("isDeleted"));
+            state=cursor.getInt(cursor.getColumnIndex("state"));
+            date=cursor.getString(cursor.getColumnIndex("date"));
+            remark=cursor.getString(cursor.getColumnIndex("remark"));
+            songPath=cursor.getString(cursor.getColumnIndex("songPath"));
+            period=cursor.getString(cursor.getColumnIndex("period"));
+            alarms.add(new Alarm(id,date,remark,songPath,isDeleted,state,period));
+            Log.i(TAG,"cursor");
+        }
+        cursor.close();
+        db.close();
+        return alarms;
     }
 
 

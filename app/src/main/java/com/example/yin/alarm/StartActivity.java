@@ -10,18 +10,22 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.yin.constant.MyConstant;
+import com.example.yin.entity.Alarm;
 import com.example.yin.entity.Music;
 import com.example.yin.myview.CircleProgressView;
+import com.example.yin.sqlite.MySqlite;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StartActivity extends AppCompatActivity {
+    private static final String TAG = "StartActivity";
     private CircleProgressView myProgress;
     private Intent intent;
     private List<Music> localMusic;
     private Music music;
     private int c=0;
+    private MySqlite mySqlite;
 
     private Handler handler = new Handler(){
         @Override
@@ -54,6 +58,7 @@ public class StartActivity extends AppCompatActivity {
         intent=new Intent(StartActivity.this,MainActivity.class);
         localMusic=new ArrayList<>();
         music=new Music();
+        mySqlite=new MySqlite(StartActivity.this);
     }
 
     /**
@@ -108,6 +113,15 @@ public class StartActivity extends AppCompatActivity {
 //                }
 //                MyConstant.localMusic=mySqlite.getAllMusic();
                 MyConstant.localMusic=localMusic;
+
+                //得到闹钟
+                MyConstant.localAlarm = mySqlite.getAllAlarm();
+                if(MyConstant.localAlarm!=null && MyConstant.localAlarm.size()>0){
+                    for(Alarm a : MyConstant.localAlarm){
+                        Log.i(TAG,a.toString());
+                    }
+                }
+
                 startActivity(intent);
                 finish();
             }
