@@ -56,11 +56,11 @@ public class MySqlite extends SQLiteOpenHelper {
             db.execSQL(sql,new Object[]{date,remark,path});
             db.close();
         }else if(remark!=null && path==null){
-            sql="insert into alarm(date,remark,isDeleted,state) values (?,?)";
+            sql="insert into alarm(date,remark) values (?,?)";
             db.execSQL(sql,new Object[]{date,remark});
             db.close();
         }else if(remark==null && path!=null){
-            sql="insert into alarm(date,songPath,isDeleted,state) values (?,?)";
+            sql="insert into alarm(date,songPath) values (?,?)";
             db.execSQL(sql,new Object[]{date,path});
             db.close();
         }
