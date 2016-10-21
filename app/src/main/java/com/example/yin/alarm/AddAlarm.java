@@ -1,7 +1,11 @@
 package com.example.yin.alarm;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -99,9 +103,19 @@ public class AddAlarm extends AppCompatActivity {
         longBtn.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                myRecord.startVoice();
-                pos=-1;
-                Toast.makeText(AddAlarm.this,MyConstant.startRecord,Toast.LENGTH_LONG).show();
+                if(ContextCompat.checkSelfPermission(AddAlarm.this, Manifest.permission.RECORD_AUDIO)!= PackageManager.PERMISSION_GRANTED){
+                    //进入到这里代表没有权限.
+                    if(ActivityCompat.shouldShowRequestPermissionRationale(AddAlarm.this,Manifest.permission.RECORD_AUDIO)){
+                        //已经禁止提示了
+                        Toast.makeText(AddAlarm.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_LONG).show();
+                    }else{
+                        ActivityCompat.requestPermissions(AddAlarm.this, new String[]{Manifest.permission.RECORD_AUDIO},0);
+                    }
+                } else {
+                    myRecord.startVoice();
+                    pos=-1;
+                    Toast.makeText(AddAlarm.this,MyConstant.startRecord,Toast.LENGTH_LONG).show();
+                }
                 return false;
             }
         });
