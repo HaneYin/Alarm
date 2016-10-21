@@ -51,6 +51,8 @@ public class AddAlarm extends AppCompatActivity {
         setContentView(R.layout.add_alarm);
         //保持屏幕唤醒，否则在录音过程当中锁屏容易被回收
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		//禁止主动弹出软键盘
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         init();
         startListener();
     }
