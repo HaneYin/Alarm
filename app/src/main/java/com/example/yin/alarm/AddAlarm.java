@@ -103,14 +103,20 @@ public class AddAlarm extends AppCompatActivity {
         longBtn.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if(ContextCompat.checkSelfPermission(AddAlarm.this, Manifest.permission.RECORD_AUDIO)!= PackageManager.PERMISSION_GRANTED){
+                boolean checkSelfPermission = ContextCompat.checkSelfPermission(AddAlarm.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED;
+                boolean hasRight=ActivityCompat.shouldShowRequestPermissionRationale(AddAlarm.this,Manifest.permission.RECORD_AUDIO);
+                Toast.makeText(AddAlarm.this,checkSelfPermission+";;"+hasRight, Toast.LENGTH_LONG).show();
+
+                if(true){
                     //进入到这里代表没有权限.
-                    if(ActivityCompat.shouldShowRequestPermissionRationale(AddAlarm.this,Manifest.permission.RECORD_AUDIO)){
-                        //已经禁止提示了
-                        Toast.makeText(AddAlarm.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_LONG).show();
-                    }else{
-                        ActivityCompat.requestPermissions(AddAlarm.this, new String[]{Manifest.permission.RECORD_AUDIO},0);
-                    }
+
+//                    Toast.makeText(AddAlarm.this,hasRight+"", Toast.LENGTH_LONG).show();
+//                    if(){
+//                        //已经禁止提示了
+////                        Toast.makeText(AddAlarm.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_LONG).show();
+//                    }else{
+//                        ActivityCompat.requestPermissions(AddAlarm.this, new String[]{Manifest.permission.RECORD_AUDIO},0);
+//                    }
                 } else {
                     myRecord.startVoice();
                     pos=-1;
