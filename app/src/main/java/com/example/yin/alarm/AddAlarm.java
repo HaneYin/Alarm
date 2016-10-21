@@ -3,7 +3,12 @@ package com.example.yin.alarm;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +42,13 @@ import java.util.ArrayList;
  */
 public class AddAlarm extends AppCompatActivity {
     private static final String LOG_TAG = "AddAlarm";
+    // 要申请的权限
+    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+    private AlertDialog dialog;
+
+    private String saveShowName,saveRemark;
+    private Integer saveHour,saveMinite;//用于恢复记录
+
     private TimePicker tp;
     private TextView showName;
     private EditText etRemark;
@@ -49,6 +61,7 @@ public class AddAlarm extends AppCompatActivity {
     private String tpCurHour,tpCurMin,curHour,curMin,date,remark,ringPath;
     private int pos;//记录点击本地音乐列表
     private AlarmServiceImpl alarmService;
+    private boolean clickLong=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +72,152 @@ public class AddAlarm extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         init();
         startListener();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveHour=tp.getCurrentHour();
+        saveMinite=tp.getCurrentMinute();
+        saveRemark=etRemark.getText().toString();
+        if(pos==-1){
+            saveShowName=showName.getText().toString();
+        }else{
+            saveShowName=pos+"";
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        tp.setCurrentHour(saveHour);
+        tp.setCurrentMinute(saveMinite);
+        if(saveShowName.contains("/sdcard/MyAlarm/Ring/")){
+            showName.setText(saveShowName);
+        }else{
+            pos=Integer.parseInt(saveShowName);
+            showName.setText(MyConstant.localMusic.get(pos).getSong_title());
+        }
+
+        etRemark.setText(saveRemark);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 版本判断。当手机系统大于 23 时，才有必要去判断权限是否获取
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // 检查该权限是否已经获取
+            int i = ContextCompat.checkSelfPermission(this, permissions[0]);
+            // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+            if (i != PackageManager.PERMISSION_GRANTED) {
+                // 如果没有授予该权限，就去提示用户请求
+//                showDialogTipUserRequestPermission();
+                new AlertDialog.Builder(AddAlarm.this)
+                        .setMessage(MyConstant.promptHaveNoRight)
+                        .setPositiveButton(MyConstant.ok,null)
+                        .show();
+                MyConstant.haveRadioRight=false;
+            }else{
+                MyConstant.haveRadioRight=true;
+            }
+        }
+    }
+
+    // 提示用户该请求权限的弹出框
+    private void showDialogTipUserRequestPermission() {
+        new AlertDialog.Builder(this)
+                .setMessage(MyConstant.promptHaveNoRight)
+                .setPositiveButton(MyConstant.startNow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startRequestPermission();
+                    }
+                })
+                .setNegativeButton(MyConstant.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MyConstant.haveRadioRight=false;
+                    }
+                })
+                .show();
+    }
+
+    // 开始提交请求权限
+    private void startRequestPermission() {
+        ActivityCompat.requestPermissions(this, permissions, 123);
+    }
+
+    // 用户权限 申请 的回调方法
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 321) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
+                    boolean b = shouldShowRequestPermissionRationale(permissions[0]);
+                    if (!b) {
+                        // 用户还是想用我的 APP 的
+                        // 提示用户去应用设置界面手动开启权限
+                        showDialogTipUserGoToAppSettting();
+                    } else
+                        finish();
+                } else {
+                    Toast.makeText(this, "权限获取成功", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    // 提示用户去应用设置界面手动开启权限
+    private void showDialogTipUserGoToAppSettting() {
+        dialog = new AlertDialog.Builder(this)
+                .setTitle("录音权限不可用")
+                .setMessage("请在-应用设置-权限-中，允许Alarm使用录音权限来保存您的声音")
+                .setPositiveButton("立即开启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 跳转到应用设置界面
+                        goToAppSetting();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).setCancelable(false).show();
+    }
+
+    // 跳转到当前应用的设置界面
+    private void goToAppSetting() {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 123);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 123) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // 检查该权限是否已经获取
+                int i = ContextCompat.checkSelfPermission(this, permissions[0]);
+                // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+                if (i != PackageManager.PERMISSION_GRANTED) {
+                    // 提示用户应该去应用设置界面手动开启权限
+                    showDialogTipUserGoToAppSettting();
+                } else {
+                    if (dialog != null && dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                    Toast.makeText(this, "权限获取成功", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -103,21 +262,8 @@ public class AddAlarm extends AppCompatActivity {
         longBtn.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                boolean checkSelfPermission = ContextCompat.checkSelfPermission(AddAlarm.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED;
-                boolean hasRight=ActivityCompat.shouldShowRequestPermissionRationale(AddAlarm.this,Manifest.permission.RECORD_AUDIO);
-                Toast.makeText(AddAlarm.this,checkSelfPermission+";;"+hasRight, Toast.LENGTH_LONG).show();
-
-                if(true){
-                    //进入到这里代表没有权限.
-
-//                    Toast.makeText(AddAlarm.this,hasRight+"", Toast.LENGTH_LONG).show();
-//                    if(){
-//                        //已经禁止提示了
-////                        Toast.makeText(AddAlarm.this, "您已禁止该权限，需要重新开启。", Toast.LENGTH_LONG).show();
-//                    }else{
-//                        ActivityCompat.requestPermissions(AddAlarm.this, new String[]{Manifest.permission.RECORD_AUDIO},0);
-//                    }
-                } else {
+                clickLong=true;
+                if(MyConstant.haveRadioRight){
                     myRecord.startVoice();
                     pos=-1;
                     Toast.makeText(AddAlarm.this,MyConstant.startRecord,Toast.LENGTH_LONG).show();
@@ -135,11 +281,12 @@ public class AddAlarm extends AppCompatActivity {
                             String ringPath= myRecord.stopVoice();
                             showName.setText(ringPath);
                             Toast.makeText(AddAlarm.this,MyConstant.endRecord,Toast.LENGTH_SHORT).show();
-                            Log.i(LOG_TAG, "录音结束");
-                        }else{
+                        }else if(!MyConstant.haveRadioRight && clickLong){
+                            Toast.makeText(AddAlarm.this,MyConstant.sorry,Toast.LENGTH_LONG).show();
+                        }else {
                             Toast.makeText(AddAlarm.this,MyConstant.tooShort,Toast.LENGTH_SHORT).show();
-                            Log.i(LOG_TAG, "时间太短了");
                         }
+                        clickLong=false;
                         break;
                     default:
                         break;
