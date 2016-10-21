@@ -8,15 +8,17 @@
     android:paddingRight="10dp"
     android:paddingBottom="5dp"
     android:orientation="vertical"
+    android:weightSum="10"
     tools:context="com.example.yin.alarm.AddAlarm">
 
     <LinearLayout
         android:weightSum="4"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="37dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <TextView
-            android:gravity="center|left"
+            android:gravity="center_vertical"
             android:text="铃声 : "
             android:textSize="25sp"
             android:layout_width="0dp"
@@ -27,7 +29,7 @@
         <TextView
             android:id="@+id/showSongName"
             android:maxLines="1"
-            android:gravity="center|left"
+            android:gravity="center_vertical"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
@@ -46,9 +48,10 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <TextView
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:text="闹钟备注 : "
             android:textSize="25sp"
             android:layout_width="wrap_content"
@@ -60,45 +63,46 @@
             android:id="@+id/_remark" />
     </LinearLayout>
 
-    <TimePicker
-        android:layout_marginTop="5dp"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/timePicker" />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+        android:layout_height="0dp"
+        android:layout_weight="7">
+        <TimePicker
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true">
+            android:layout_height="match_parent"
+            android:id="@+id/timePicker" />
+    </ScrollView>
 
-            <Button
-                android:id="@+id/record"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button"
-                android:text="长按录音"
-                android:layout_marginRight="5dp"
-                android:textSize="15sp"
-                />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-            <Button
-                android:id="@+id/saveSetting"
-                android:layout_marginLeft="5dp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button"
-                android:text="确定"
-                android:textSize="15sp"
-                />
+        <Button
+            android:id="@+id/record"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/button"
+            android:text="长按录音"
+            android:layout_marginRight="5dp"
+            android:textSize="15sp"
+            />
 
-        </LinearLayout>
-    </RelativeLayout>
+        <Button
+            android:id="@+id/saveSetting"
+            android:layout_marginLeft="5dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/button"
+            android:text="确定"
+            android:textSize="15sp"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

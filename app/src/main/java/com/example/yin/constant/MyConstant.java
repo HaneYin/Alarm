@@ -15,15 +15,19 @@ public class MyConstant {
     public static String defaultRing="默认铃声";
     public static String discardSetting="要舍弃对该闹钟所做的更改吗？";
     public static String addAlarmOK="添加闹钟成功！";
+    public static String sorry="录音权限未获取，无法使用此功能";
+    public static String promptHaveNoRight="由于尚未开启录音权限，您将无法正常使用录音功能";
     public static String ok="确定";
     public static String cancel="取消";
+    public static String startNow="立即开启";
     public static String twice="再按一次退出";
     public static String startRecord="开始录音...";
     public static String endRecord="录音结束";
     public static String tooShort="按住别松手";
     public static List<Music> localMusic = null;
-    public static boolean isReadyToRecord=false;
     public static List<Alarm> localAlarm = null;
+    public static boolean isReadyToRecord=false;
+    public static boolean haveRadioRight=true;
     public static int listPosition=-1;
 
 }
