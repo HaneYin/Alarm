@@ -29,7 +29,7 @@ public class MySqlite extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         if(!tabIsExist("alarm")){
-            String sql ="create table alarm (id integer primary key autoincrement,date varchar not null,remark varchar,songPath varchar null,isDeleted integer default '0',state integer default '0',period varchar default '1,2,3,4,5,6,7')";
+            String sql ="create table alarm (id integer primary key autoincrement,date varchar not null,remark varchar,songPath varchar null,isDeleted integer default '0',state integer default '0',period varchar default '0,1,2,3,4,5,6,7')";
             db.execSQL(sql);
         }
         Log.i(LOG_TAG,"sqlite start");

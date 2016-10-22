@@ -62,6 +62,7 @@ public class AddAlarm extends AppCompatActivity {
     private int pos;//记录点击本地音乐列表
     private AlarmServiceImpl alarmService;
     private boolean clickLong=false;
+    private Alarm alarm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -341,7 +342,10 @@ public class AddAlarm extends AppCompatActivity {
                     date=(curHour+":"+curMin);
                     remark=(etRemark.getText().toString()==null || etRemark.getText().toString().trim().equals("") ? null : etRemark.getText().toString());
                     ringPath=(pos==-1 ? (!showName.getText().toString().equals(MyConstant.defaultRing) ? showName.getText().toString() : null) : MyConstant.localMusic.get(pos).getSong_url());
-                    alarmService.save(new Alarm(date,remark,ringPath));
+                    alarm=new Alarm(date,remark,ringPath);
+                    alarmService.save(alarm);
+                    alarm.setPeriod("0,1,2,3,4,5,6,7");
+                    MyConstant.localAlarm.add(alarm);
                     Toast.makeText(AddAlarm.this,MyConstant.addAlarmOK,Toast.LENGTH_SHORT).show();
                     finish();
                     break;

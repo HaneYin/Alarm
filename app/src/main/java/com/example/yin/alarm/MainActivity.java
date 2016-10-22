@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.yin.adapter.AlarmAdapter;
 import com.example.yin.constant.MyConstant;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private String time=null;
     private SimpleDateFormat dateFormat;
     private long times = 0;
+    private AlarmAdapter alarmAdapter;
+
 
     private Handler handler = new Handler(){
         @Override
@@ -135,6 +138,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         flag=true;
         refresh();
+        if(MyConstant.localAlarm!=null){
+            alarmAdapter=new AlarmAdapter(MyConstant.localAlarm,MainActivity.this);
+            lv.setAdapter(alarmAdapter);
+        }
+
     }
 
     @Override
