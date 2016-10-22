@@ -1,4 +1,4 @@
-package com.example.yin.MyMythod;
+package com.example.yin.mythod;
 
 import android.content.Context;
 import android.os.Environment;

@@ -1,4 +1,4 @@
-package com.example.yin.MyMythod;
+package com.example.yin.mythod;
 
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
