@@ -344,8 +344,7 @@ public class AddAlarm extends AppCompatActivity {
                     ringPath=(pos==-1 ? (!showName.getText().toString().equals(MyConstant.defaultRing) ? showName.getText().toString() : null) : MyConstant.localMusic.get(pos).getSong_url());
                     alarm=new Alarm(date,remark,ringPath);
                     alarmService.save(alarm);
-                    alarm.setPeriod("0,1,2,3,4,5,6,7");
-                    MyConstant.localAlarm.add(alarm);
+                    MyConstant.localAlarm=alarmService.getAll();
                     Toast.makeText(AddAlarm.this,MyConstant.addAlarmOK,Toast.LENGTH_SHORT).show();
                     finish();
                     break;

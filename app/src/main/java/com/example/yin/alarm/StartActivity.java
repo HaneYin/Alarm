@@ -80,9 +80,7 @@ public class StartActivity extends AppCompatActivity {
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
                     duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                    if(duration<10000){
-                        continue;
-                    }
+
                     //歌曲名
                     title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
                     //歌手
@@ -99,8 +97,7 @@ public class StartActivity extends AppCompatActivity {
                     _display_name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
                     //类型
                     mime_type = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE));
-                    music = new Music(title, singer, duration, url);
-                    localMusic.add(music);
+
                     c+=100/cursor.getCount();
                     c=((i==cursor.getCount()-1)&&(c<100) ? 100 : c);
                     c=(c>100 ? 100 : c);
@@ -110,6 +107,11 @@ public class StartActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    if(duration<10000){
+                        continue;
+                    }
+                    music = new Music(title, singer, duration, url);
+                    localMusic.add(music);
                 }
                 cursor.close();
                 MyConstant.localMusic=localMusic;
