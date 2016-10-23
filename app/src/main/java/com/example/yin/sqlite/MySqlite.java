@@ -40,9 +40,24 @@ public class MySqlite extends SQLiteOpenHelper {
 
     }
 
-    public void addAlarm(String date,String remark,String path){
+    public void addAlarm(List<Object> key,List<Object> value){
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql=null;
+        StringBuffer sql1=new StringBuffer("insert into alarm (");
+        StringBuffer sql2=new StringBuffer(") values (");
+        for(int i=0;i<key.size();i++){
+            if(i==key.size()-1){
+                sql1.append(key.get(i));
+                sql2.append("'"+value.get(i)+"')");
+            }else{
+                sql1.append(key.get(i)+",");
+                sql2.append("'"+value.get(i)+"',");
+            }
+        }
+        db.execSQL(sql1.toString()+sql2.toString());
+        db.close();
+        Log.i(LOG_TAG,"add ok!  sql:"+(sql1.toString()+sql2.toString()));
+
+        /*String sql=null;
         if(remark==null && path==null){
             sql="insert into alarm(date) values (?)";
             db.execSQL(sql,new Object[]{date});
@@ -59,8 +74,7 @@ public class MySqlite extends SQLiteOpenHelper {
             sql="insert into alarm(date,songPath) values (?,?)";
             db.execSQL(sql,new Object[]{date,path});
             db.close();
-        }
-        Log.i(LOG_TAG,"add ok");
+        }*/
     }
 
     public List<Alarm> getAllAlarm(){

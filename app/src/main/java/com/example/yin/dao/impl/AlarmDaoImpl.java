@@ -6,6 +6,7 @@ import com.example.yin.dao.AlarmDao;
 import com.example.yin.entity.Alarm;
 import com.example.yin.sqlite.MySqlite;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,19 @@ public class AlarmDaoImpl implements AlarmDao {
 
     @Override
     public void save(Alarm alarm) {
-        this.mySqlite.addAlarm(alarm.getDate(),alarm.getRemark(),alarm.getSongPath());
+        List<Object> key=new ArrayList<>();
+        List<Object> values=new ArrayList<>();
+        key.add("date");
+        values.add(alarm.getDate());
+        if(alarm.getRemark()!=null){
+            key.add("remark");
+            values.add(alarm.getRemark());
+        }
+        if(alarm.getSongPath()!=null){
+            key.add("songPath");
+            values.add(alarm.getSongPath());
+        }
+        this.mySqlite.addAlarm(key,values);
     }
 
     @Override
