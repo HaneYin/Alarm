@@ -12,11 +12,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.example.yin.adapter.AlarmAdapter;
 import com.example.yin.constant.MyConstant;
+import com.example.yin.mythod.MyMythod;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case R.id.moreset:  //更多设置
-                Toast.makeText(getApplicationContext(), "moreset", Toast.LENGTH_SHORT).show();
+                MyMythod.showDialog(MainActivity.this,"moreset",0);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         if(keyCode==event.KEYCODE_BACK && event.getAction()==KeyEvent.ACTION_DOWN){
             if(System.currentTimeMillis()-times > 2000){
                 times=System.currentTimeMillis();
-                Toast.makeText(getApplicationContext(), MyConstant.twice, Toast.LENGTH_SHORT).show();
+                MyMythod.showDialog(MainActivity.this,MyConstant.twice,0);
                 return true;
             }else{
                 finish();
