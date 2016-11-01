@@ -239,10 +239,23 @@ public class AddAlarm extends AppCompatActivity {
                     remark=(etRemark.getText().toString()==null || etRemark.getText().toString().trim().equals("") ? null : etRemark.getText().toString());
                     ringPath=(pos==-1 ? (!showName.getText().toString().equals(MyConstant.defaultRing) ? showName.getText().toString() : null) : MyConstant.localMusic.get(pos).getSong_url());
                     alarm=new Alarm(date,remark,ringPath);
-                    alarmService.save(alarm);
-                    MyConstant.localAlarm=alarmService.getAll();
-                    MyMythod.showDialog(AddAlarm.this,MyConstant.addAlarmOK,0);
-                    finish();
+                    if(MyConstant.localAlarm!=null && MyConstant.localAlarm.contains(alarm)){
+                        builder=new AlertDialog.Builder(AddAlarm.this);
+                        builder.setMessage(MyConstant.confirmUpdate)
+                                .setPositiveButton(MyConstant.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                                .setNegativeButton(MyConstant.cancel,null)
+                                .show();
+                    }else{
+                        alarmService.save(alarm);
+                        MyConstant.localAlarm=alarmService.getAll();
+                        MyMythod.showDialog(AddAlarm.this,MyConstant.addAlarmOK,0);
+                        finish();
+                    }
                     break;
             }
 

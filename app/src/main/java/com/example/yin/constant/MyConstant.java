@@ -17,6 +17,7 @@ public class MyConstant {
     public static String addAlarmOK="添加闹钟成功！";
     public static String sorry="录音权限未获取，无法使用此功能";
     public static String promptHaveNoRight="由于尚未开启录音权限，您将无法正常使用录音功能";
+    public static String confirmUpdate="该闹钟已存在，是否修改？";
     public static String ok="确定";
     public static String cancel="取消";
     public static String startNow="立即开启";
@@ -29,5 +30,4 @@ public class MyConstant {
     public static boolean isReadyToRecord=false;
     public static boolean haveRadioRight=true;
     public static int listPosition=-1;
-
 }

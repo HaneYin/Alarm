@@ -22,6 +22,7 @@ public class Alarm {
         this.date = date;
         this.remark = remark;
         this.songPath = songPath;
+        this.period = "0,1,2,3,4,5,6,7";
     }
 
     public Alarm(String date, String remark, String songPath, int isDeleted, int state, String period) {

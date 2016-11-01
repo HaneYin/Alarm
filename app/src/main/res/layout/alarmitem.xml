@@ -47,6 +47,7 @@
             </LinearLayout>
         </LinearLayout>
         <Switch
+            android:checked="true"
             android:layout_gravity="center_vertical|right"
             android:layout_weight="1"
             android:layout_width="0dp"
