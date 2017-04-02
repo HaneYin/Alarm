@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="ClickableViewAccessibility">
+        <ignore path="src/com/yin/alarm/main/AddAlarm.java" />
+    </issue>
+    <issue id="HandlerLeak" severity="ignore" />
+    <issue id="InflateParams">
+        <ignore path="src/com/yin/alarm/main/AddAlarm.java" />
+    </issue>
+    <issue id="SdCardPath" severity="ignore" />
+    <issue id="SimpleDateFormat" severity="ignore" />
+</lint>
